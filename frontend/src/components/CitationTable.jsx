@@ -1,6 +1,8 @@
 // frontend/src/components/CitationTable.jsx
 import React from 'react';
 
+import './CitationTable.css'; // Import the CSS file for styling
+
 const CitationTable = ({ citations }) => {
   if (!citations || citations.length === 0 || (citations.length === 1 && citations[0] === "No overlaps.")) {
     return (
@@ -14,7 +16,7 @@ const CitationTable = ({ citations }) => {
   // Parse citations from the format "[F{fs}/C{cs}] {u}"
   // We still parse them here, but will only display the URL
   const parsedCitations = citations
-    .filter(citation => citation !== "No overlaps.")
+    .filter(citation => citation !== "No overlaps.") // Filter out the specific string
     .map(citation => {
       const match = citation.match(/\[F(\d+)\/C([\d.]+)] (.*)/);
       if (match) {

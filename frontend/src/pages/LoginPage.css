@@ -1,0 +1,76 @@
+/* LoginPage.css */
+
+:root {
+  --primary-color: #6366f1; /* Indigo-500 */
+  --primary-hover: #4f46e5; /* Indigo-600 */
+  --btn-text-color: #fff;
+  --text-color: #111827;    /* Gray-900 */
+  --bg-light: #f9fafb;      /* Gray-50 */
+  --border-radius: 0.5rem;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --card-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.login-page {
+  height: 100vh;
+  background-color: var(--bg-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family);
+  padding: 1rem;
+}
+
+.login-card {
+  background: #fff;
+  padding: 2.5rem 3rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  color: var(--text-color);
+}
+
+.login-card h2 {
+  margin-bottom: 0.75rem;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.login-card p {
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  color: #4b5563; /* Gray-600 */
+  user-select: none;
+}
+
+.google-sign-in-btn {
+  background-color: #4285F4; /* Google Blue */
+  color: var(--btn-text-color);
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--border-radius);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: background-color 0.3s ease;
+  user-select: none;
+  width: 100%;
+  justify-content: center;
+}
+
+.google-sign-in-btn:hover {
+  background-color: #3367d6; /* Darker Google Blue */
+}
+
+.google-sign-in-btn:active {
+  background-color: #2a56c6;
+}
+
+.google-sign-in-btn svg {
+  font-size: 1.5rem;
+}

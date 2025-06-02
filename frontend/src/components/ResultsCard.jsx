@@ -1,7 +1,7 @@
 // frontend/src/components/ResultsCard.jsx
 import React from 'react';
 import { FiDownload, FiCheckCircle, FiCpu } from 'react-icons/fi'; // Added icons
-
+import './ResultsCard.css'; // Ensure you have a CSS file for styling
 const ResultsCard = ({ originality, aiProbability, onDownloadPdf, pdfReportPath }) => {
   return (
     <div className="card results-card">

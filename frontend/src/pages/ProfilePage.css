@@ -1,0 +1,132 @@
+/* ProfilePage.css */
+
+:root {
+  --primary-color: #6366f1;
+  --info-color: #2563eb;
+  --error-color: #dc2626;
+  --secondary-color: #6b7280;
+  --spacing-unit: 1.5rem;
+  --border-radius: 0.5rem;
+  --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: #f9fafb;
+  margin: 0;
+  padding: 0;
+  color: #111827;
+}
+
+.app-header {
+  text-align: center;
+  margin: 2rem 1rem;
+}
+
+.app-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.app-header .subtitle {
+  color: var(--secondary-color);
+  font-size: 1.1rem;
+}
+
+/* Profile Card Styling */
+.profile-card.card {
+  max-width: 600px;
+  background: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  margin: 0 auto 2rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 9999px;
+  object-fit: cover;
+  margin-bottom: 1rem;
+  border: 3px solid #e5e7eb; /* Gray-200 */
+}
+
+.profile-card h3 {
+  font-size: 1.5rem;
+  margin: 0.5rem 0 0.25rem;
+}
+
+.profile-card p {
+  color: var(--secondary-color);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0 1.5rem;
+}
+
+/* Stats */
+.profile-stats {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 1.5rem;
+}
+
+.stat-item .value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.stat-item .label {
+  font-size: 0.9rem;
+  color: var(--secondary-color);
+  margin-top: 0.25rem;
+  text-align: center;
+}
+
+/* Actions */
+.profile-actions {
+  margin-top: 1rem;
+}
+
+/* Message Box */
+.message-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+.message-box.info {
+  background-color: #dbeafe;
+  color: var(--info-color);
+  border: 1.5px solid var(--info-color);
+}
+
+.message-box.error {
+  background-color: #fee2e2;
+  color: var(--error-color);
+  border: 1.5px solid var(--error-color);
+}
+
+.message-box svg {
+  flex-shrink: 0;
+  font-size: 1.2rem;
+  margin-top: 2px;
+}

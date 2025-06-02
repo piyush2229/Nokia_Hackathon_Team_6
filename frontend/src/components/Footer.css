@@ -1,0 +1,24 @@
+/* Footer.css */
+
+.app-footer {
+  width: 100%;
+  background-color: #1F2937; /* Gray-800 */
+  color: #F9FAFB;             /* Gray-50 */
+  text-align: center;
+  padding: 1.25rem 1rem;
+  font-size: 0.9rem;
+  margin-top: auto;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.app-footer p {
+  margin: 0.3rem 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .app-footer {
+    font-size: 0.8rem;
+    padding: 1rem 0.5rem;
+  }
+}

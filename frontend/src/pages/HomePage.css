@@ -1,0 +1,215 @@
+/* HomePage.css */
+
+:root {
+  --primary-color: #6366f1; /* Indigo-500 */
+  --primary-hover: #4f46e5; /* Indigo-600 */
+  --error-color: #ef4444;   /* Red-500 */
+  --info-color: #3b82f6;    /* Blue-500 */
+  --text-color: #111827;    /* Gray-900 */
+  --bg-light: #f9fafb;      /* Gray-50 */
+  --input-border: #d1d5db;  /* Gray-300 */
+  --input-border-focus: var(--primary-color);
+  --btn-text-color: #fff;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --border-radius: 0.5rem;
+  --card-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.page-welcome-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--text-color);
+}
+
+.page-welcome-header h2 {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.page-welcome-header p {
+  font-size: 1.1rem;
+  color: #4b5563; /* Gray-600 */
+}
+
+.analysis-form {
+  background: #fff;
+  padding: 1.5rem 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  max-width: 900px;
+  margin: 0 auto 3rem auto;
+  font-family: var(--font-family);
+}
+
+.input-section {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.input-group {
+  flex: 1 1 420px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.text-input {
+  width: 100%;
+  min-height: 180px;
+  padding: 0.8rem 1rem;
+  border: 1.8px solid var(--input-border);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  resize: vertical;
+  font-family: var(--font-family);
+  transition: border-color 0.3s ease;
+  background-color: var(--bg-light);
+  color: var(--text-color);
+}
+
+.text-input:focus {
+  border-color: var(--input-border-focus);
+  outline: none;
+  box-shadow: 0 0 6px var(--input-border-focus);
+}
+
+.or-divider {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #6b7280; /* Gray-500 */
+  margin: 0.75rem 0 1rem 0;
+  user-select: none;
+  position: relative;
+}
+
+.or-divider span {
+  background: #fff;
+  padding: 0 0.8rem;
+  position: relative;
+  z-index: 1;
+}
+
+.or-divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  border-top: 1px solid #d1d5db; /* Gray-300 */
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.error-message {
+  background-color: #fee2e2; /* Red-100 */
+  color: var(--error-color);
+  font-weight: 600;
+  border-radius: var(--border-radius);
+  padding: 0.8rem 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.analyze-btn,
+.clear-btn {
+  flex: 1 1 200px;
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius);
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+  border: none;
+}
+
+.analyze-btn {
+  background-color: var(--primary-color);
+  color: var(--btn-text-color);
+}
+
+.analyze-btn:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.analyze-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.clear-btn {
+  background-color: #e5e7eb; /* Gray-200 */
+  color: #374151; /* Gray-700 */
+}
+
+.clear-btn:hover:not(:disabled) {
+  background-color: #d1d5db; /* Gray-300 */
+}
+
+.clear-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.results-section {
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: var(--font-family);
+}
+
+.info-box {
+  margin-top: 1.5rem;
+  padding: 1rem 1.2rem;
+  background-color: #dbeafe; /* Blue-100 */
+  border-left: 5px solid var(--info-color);
+  color: var(--info-color);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: var(--border-radius);
+  font-size: 0.95rem;
+  user-select: none;
+}
+
+.info-box svg {
+  font-size: 1.3rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .input-section {
+    flex-direction: column;
+  }
+  
+  .input-group {
+    flex: 1 1 100%;
+  }
+  
+  .analyze-btn,
+  .clear-btn {
+    flex: 1 1 100%;
+  }
+}

@@ -1,7 +1,7 @@
 // frontend/src/components/MobileCitationList.jsx
 import React from 'react';
 import { FiLink } from 'react-icons/fi';
-
+import './MobileCitationList.css'; // Ensure you have a CSS file for styling
 const MobileCitationList = ({ citations }) => {
   if (!citations || citations.length === 0 || (citations.length === 1 && citations[0] === "No overlaps.")) {
     return (

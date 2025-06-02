@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Import configuration and database
 from config import Config
-from database import DB, User, bcrypt
+from database import DB, User, Report, bcrypt
 
 # Import the analyse function from your core_detector script
 try:
@@ -49,14 +49,14 @@ def load_user(user_id):
     return User.get(user_id)
 
 # Redirect unauthenticated requests to login page for protected views
-# This function is called by Flask-Login if login_required fails
 @login_manager.unauthorized_handler
 def unauthorized():
     # If a protected API route is accessed without login, return 401 JSON
-    if request.blueprint == 'auth' or request.path.startswith('/analyse') or request.path.startswith('/download-report'):
+    # Check if the request expects JSON (e.g., from frontend fetch)
+    if request.is_json or (request.accept_mimetypes.best_match(['application/json', 'text/html']) == 'application/json' and not request.path.startswith('/auth')):
         return jsonify({"error": "Authentication required"}), 401
-    # For UI routes, you might redirect
-    return redirect("http://localhost:3000/auth") # Redirect to frontend auth page
+    # For browser navigations to protected UI routes, redirect to frontend auth page
+    return redirect("http://localhost:5173/auth")
 
 DB.initialize()
 
@@ -79,7 +79,6 @@ def register():
     try:
         user = User.create_user(email, password, name)
         if user:
-            # Optionally log in user immediately after registration
             login_user(user) 
             return jsonify({"message": "User registered successfully", "user": {"id": user.id, "email": user.get_email(), "name": user.get_name()}}), 201
         else:
@@ -91,7 +90,7 @@ def register():
         return jsonify({"error": f"An error occurred during registration: {str(e)}"}), 500
 
 @auth_bp.route('/login', methods=['POST'])
-def login_route(): # Renamed to avoid conflict with login_user function
+def login_route():
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
@@ -107,8 +106,8 @@ def login_route(): # Renamed to avoid conflict with login_user function
         return jsonify({"error": "Invalid email or password"}), 401
 
 @auth_bp.route('/logout')
-@login_required # Ensure user is logged in to logout
-def logout_route(): # Renamed to avoid conflict with logout_user function
+@login_required
+def logout_route():
     logout_user()
     return jsonify({"message": "Logged out successfully"}), 200
 
@@ -116,7 +115,7 @@ def logout_route(): # Renamed to avoid conflict with logout_user function
 app.register_blueprint(auth_bp)
 
 # --- User Info Route (NOT part of blueprint's prefix) ---
-@app.route('/@me') # This route is now at the root, not /api/auth/@me
+@app.route('/@me')
 def me():
     if current_user.is_authenticated:
         return jsonify({
@@ -126,8 +125,38 @@ def me():
             'profile_pic': current_user.get_profile_pic(),
             'is_authenticated': True
         })
-    return jsonify({'is_authenticated': False, 'error': 'Not authenticated'}), 401 # Return JSON error for frontend
+    return jsonify({'is_authenticated': False, 'error': 'Not authenticated'}), 401
 
+
+# --- NEW: Dashboard & History Routes ---
+@app.route('/api/dashboard_stats', methods=['GET'])
+@login_required
+def dashboard_stats():
+    user_id = current_user.id
+    total_reports = Report.get_total_reports_count(user_id)
+    last_report = Report.get_last_report(user_id)
+
+    if last_report and 'pdf_report_path' in last_report:
+        last_report['pdf_file_name'] = os.path.basename(last_report['pdf_report_path'])
+        del last_report['pdf_report_path']
+
+    return jsonify({
+        "total_reports": total_reports,
+        "last_checked_document": last_report
+    }), 200
+
+@app.route('/api/history', methods=['GET'])
+@login_required
+def get_history():
+    user_id = current_user.id
+    reports = Report.get_user_reports(user_id)
+    
+    for report in reports:
+        if 'pdf_report_path' in report:
+            report['pdf_file_name'] = os.path.basename(report['pdf_report_path'])
+            del report['pdf_report_path']
+
+    return jsonify(reports), 200
 
 # --- File Handling & Analysis Routes ---
 
@@ -149,10 +178,10 @@ def save_uploaded_file(file_obj):
         return temp_file.name
     except Exception as e:
         print(f"Error saving file: {e}")
-        raise # Re-raise to be caught by the outer try-except
+        raise
         
 @app.route('/analyse', methods=['POST'])
-@login_required # Protect this route: requires login
+@login_required
 def run_analysis():
     main_text_input = request.form.get('main_text')
     main_file_obj = request.files.get('main_file')
@@ -182,6 +211,10 @@ def run_analysis():
             comparison_txt=comparison_text_input,
             comparison_file=comparison_file_arg
         )
+
+        file_name_for_history = main_file_obj.filename if main_file_obj else "Text Input"
+        Report.save_report_metadata(current_user.id, file_name_for_history,
+                                    originality_score, ai_probability, pdf_report_path)
 
         response_data = {
             "citations": cite_txt.split('\n') if cite_txt != "No overlaps." else ["No overlaps."],

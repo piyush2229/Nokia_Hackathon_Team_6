@@ -1,5 +1,6 @@
 // frontend/src/pages/LoginPage.jsx
 import React from 'react';
+import './LoginPage.css'; // Ensure you have a CSS file for styling
 import { FiMail } from 'react-icons/fi'; // Icon for Google login
 
 const LoginPage = () => {

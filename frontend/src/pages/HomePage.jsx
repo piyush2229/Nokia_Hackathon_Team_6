@@ -8,7 +8,7 @@ import CitationTable from '../components/CitationTable';
 import MobileCitationList from '../components/MobileCitationList';
 import LoadingOverlay from '../components/LoadingOverlay';
 import { FiInfo, FiXCircle } from 'react-icons/fi';
-
+import './HomePage.css'; // Ensure you have a CSS file for styling
 function HomePage() {
   const { user } = useAuth(); // Get user from auth context
 

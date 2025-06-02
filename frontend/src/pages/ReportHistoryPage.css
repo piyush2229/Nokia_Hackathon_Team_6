@@ -1,0 +1,154 @@
+/* ReportHistoryPage.css */
+
+:root {
+  --primary-color: #6366f1;
+  --secondary-color: #6b7280;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --info-color: #2563eb;
+  --error-color: #dc2626;
+  --card-bg: #ffffff;
+  --spacing-unit: 1.5rem;
+  --border-radius: 0.5rem;
+  --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Global Styles */
+body {
+  font-family: var(--font-family);
+  background-color: #f9fafb;
+  margin: 0;
+  padding: 0;
+  color: #111827;
+}
+
+.app-header {
+  text-align: center;
+  margin: 2rem 1rem;
+}
+
+.app-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.app-header .subtitle {
+  font-size: 1.1rem;
+  color: var(--secondary-color);
+}
+
+/* History List Container */
+.reports-history-list {
+  max-width: 800px;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Individual Report Card */
+.history-item-card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.item-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.item-detail strong {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.item-detail span {
+  color: var(--secondary-color);
+}
+
+.score-value-sm {
+  font-weight: 600;
+}
+
+.score-value-sm.originality {
+  color: var(--success-color);
+}
+
+.score-value-sm.ai-probability {
+  color: var(--warning-color);
+}
+
+/* Action Buttons */
+.history-item-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.history-item-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background-color: #e5e7eb;
+  border: none;
+  color: #111827;
+  transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #d1d5db;
+}
+
+/* No Reports Fallback Card */
+.card {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+}
+
+.no-results-message {
+  font-size: 1rem;
+  color: var(--secondary-color);
+  margin-top: 0.75rem;
+}
+
+/* Message Boxes */
+.message-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  margin: 1rem auto;
+  max-width: 800px;
+}
+
+.message-box.error {
+  background-color: #fee2e2;
+  color: var(--error-color);
+  border: 1.5px solid var(--error-color);
+}
+
+.message-box svg {
+  font-size: 1.25rem;
+  margin-top: 2px;
+}

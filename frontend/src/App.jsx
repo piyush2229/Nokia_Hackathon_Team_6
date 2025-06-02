@@ -1,26 +1,33 @@
 // frontend/src/App.jsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from '../src/hooks/useAuth.jsx';
-import Navbar from '../src/components/Navbar';
-import Footer from '../src/components/Footer';
-import HomePage from '../src/pages/HomePage';
-import AuthPage from '../src/pages/AuthPage'; // NEW: AuthPage for login/signup
-import LoadingOverlay from '../src/components/LoadingOverlay';
+import { AuthProvider, useAuth } from './hooks/useAuth.jsx';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import LoadingOverlay from './components/LoadingOverlay';
+
+// Import all pages using correct relative paths
+import AuthPage from './pages/AuthPage'; // Correct relative import for AuthPage
+import DashboardPage from './pages/DashboardPage';
+import PlagiarismCheckerPage from './pages/PlagiarismCheckerPage';
+import ReportHistoryPage from './pages/ReportHistoryPage';
+import SearchPlagiarismPage from './pages/SearchPlagiarismPage';
+import ProfilePage from './pages/ProfilePage';
 
 function AppContent() {
   const { isAuthenticated, loadingAuth } = useAuth();
   const navigate = useNavigate();
 
+  // Handle protected routes and redirects
   useEffect(() => {
     if (!loadingAuth) {
-      // If not authenticated, redirect to /auth
       if (!isAuthenticated) {
+        // If not authenticated, and not on the auth page, redirect to auth
         if (window.location.pathname !== '/auth') {
           navigate('/auth', { replace: true });
         }
       } else {
-        // If authenticated, and currently on /auth, redirect to home
+        // If authenticated, and currently on the auth page, redirect to dashboard
         if (window.location.pathname === '/auth') {
           navigate('/', { replace: true });
         }
@@ -33,14 +40,23 @@ function AppContent() {
   }
 
   return (
-    <> {/* Removed app-container here as Navbar/Footer are outside */}
+    <>
       <Navbar />
-      <div className="app-container"> {/* This div now holds the main content */}
+      {/* The app-container div ensures main content respects max-width and padding */}
+      <div className="app-container">
         <Routes>
           <Route path="/auth" element={<AuthPage />} />
-          {/* Protected Route: Only accessible if isAuthenticated is true */}
+          {/* Protected Routes */}
           {isAuthenticated ? (
-            <Route path="/" element={<HomePage />} />
+            <>
+              <Route path="/" element={<DashboardPage />} />
+              <Route path="/check" element={<PlagiarismCheckerPage />} />
+              <Route path="/history" element={<ReportHistoryPage />} />
+              <Route path="/search" element={<SearchPlagiarismPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              {/* Fallback for any other path if authenticated */}
+              <Route path="*" element={<DashboardPage />} />
+            </>
           ) : (
             // Fallback for any other route if not authenticated, redirect to /auth
             <Route path="*" element={<AuthPage />} />

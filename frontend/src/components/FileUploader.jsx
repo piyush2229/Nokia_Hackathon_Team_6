@@ -1,5 +1,6 @@
 // frontend/src/components/FileUploader.jsx
 import React from 'react';
+import './FileUploader.css'; // Ensure you have the correct path to your CSS file
 import { FiUpload, FiFileText } from 'react-icons/fi'; // Added FiFileText icon
 
 const FileUploader = ({ onFileChange, selectedFile, label = "Upload File" }) => {

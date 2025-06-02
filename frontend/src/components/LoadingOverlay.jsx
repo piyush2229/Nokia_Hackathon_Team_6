@@ -1,5 +1,6 @@
 // frontend/src/components/LoadingOverlay.jsx
 import React from 'react';
+import './LoadingOverlay.css'; // Ensure you have a CSS file for styling
 
 const LoadingOverlay = ({ message, onCancel }) => {
   return (

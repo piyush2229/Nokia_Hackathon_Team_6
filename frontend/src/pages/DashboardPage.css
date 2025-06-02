@@ -1,0 +1,194 @@
+:root {
+  --primary-color: #6366f1;
+  --secondary-color: #6b7280;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --info-color: #2563eb;
+  --error-color: #dc2626;
+  --card-bg: #ffffff;
+  --spacing-unit: 1.5rem;
+  --border-radius: 0.5rem;
+  --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --text-light-color: #6b7280;
+}
+
+/* Basic Reset */
+body {
+  font-family: var(--font-family);
+  background-color: #f9fafb;
+  margin: 0;
+  padding: 0;
+  color: #111827;
+}
+
+/* Page Header */
+.page-welcome-header {
+  text-align: center;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.page-welcome-header h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.page-welcome-header p {
+  font-size: 1.1rem;
+  color: var(--secondary-color);
+}
+
+/* Grid Layout */
+.dashboard-grid {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-shadow);
+  padding: 1.5rem;
+}
+
+.dashboard-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.dashboard-card .value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.dashboard-card .sub-value {
+  color: var(--text-light-color);
+}
+
+/* Last Checked Document Styles */
+.last-checked-doc-card .meta-info {
+  font-size: 0.95rem;
+  color: var(--text-light-color);
+  margin-bottom: 0.25rem;
+}
+
+/* Score Display */
+.score-display {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Circle Progress Styles */
+.circle-progress-container {
+  text-align: center;
+}
+
+.circle-progress-svg {
+  width: 80px;
+  height: 80px;
+  transform: rotate(-90deg);
+}
+
+.circle-progress-track {
+  fill: none;
+  stroke: #e5e7eb;
+  stroke-width: 8;
+}
+
+.circle-progress-bar {
+  fill: none;
+  stroke-width: 8;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.circle-progress-bar.originality {
+  stroke: var(--success-color);
+}
+
+.circle-progress-bar.ai-probability {
+  stroke: var(--warning-color);
+}
+
+.circle-progress-text {
+  position: relative;
+  top: -60px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  text-decoration: none;
+  justify-content: center;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #4f46e5;
+}
+
+.btn-secondary {
+  background-color: #e5e7eb;
+  color: #111827;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #d1d5db;
+}
+
+/* Quick Actions */
+.dashboard-quick-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* Error Box */
+.message-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  max-width: 800px;
+  margin: 1rem auto;
+}
+
+.message-box.error {
+  background-color: #fee2e2;
+  color: var(--error-color);
+  border: 1.5px solid var(--error-color);
+}
+
+.message-box svg {
+  font-size: 1.25rem;
+}

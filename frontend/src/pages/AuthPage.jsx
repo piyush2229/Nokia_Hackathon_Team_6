@@ -1,8 +1,8 @@
 // frontend/src/pages/AuthPage.jsx
 import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth.jsx';
-import { FiMail, FiLock, FiUser, FiInfo, FiXCircle } from 'react-icons/fi'; // Added FiUser for name input
-
+import { FiMail, FiLock, FiUser, FiInfo, FiXCircle } from 'react-icons/fi';
+import './AuthPage.css'; // Ensure you have a CSS file for styling
 function AuthPage() {
   const [activeTab, setActiveTab] = useState('login'); // 'login' or 'signup'
   const [email, setEmail] = useState('');
@@ -66,7 +66,7 @@ function AuthPage() {
         </div>
 
         {message && (
-          <div className={`auth-message ${message.type}`}>
+          <div className={`message-box ${message.type}`}> {/* Changed to .message-box */}
             {message.type === 'error' ? <FiXCircle /> : <FiInfo />}
             {message.text}
           </div>
@@ -123,7 +123,7 @@ function AuthPage() {
             </>
           )}
 
-          <button type="submit" className="auth-submit-btn" disabled={loadingAuth}>
+          <button type="submit" className="auth-submit-btn btn btn-primary" disabled={loadingAuth}> {/* Use btn styles */}
             {loadingAuth ? 'Processing...' : (activeTab === 'login' ? 'Login' : 'Sign Up')}
           </button>
         </form>
