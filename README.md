@@ -1,1 +1,186 @@
-"# Nokia_Hackathon" 
+# Plagiarism and AI Content Detector (Nokia_Hackathon)
+
+## 1. Project Overview
+
+This web application is designed to detect plagiarism by comparing input text or documents against web sources. It also estimates the probability of the content being AI-generated. The application features user authentication, allowing users to view their report history and download detailed analysis reports in PDF format.
+
+## 2. Features
+
+*   **User Management:**
+    *   User registration and login.
+    *   Secure authentication using session cookies (via Flask-Login).
+*   **Core Analysis:**
+    *   Plagiarism detection for uploaded files (.txt, .pdf, .docx) or direct text input.
+    *   Comparison against web sources using Google Search.
+    *   AI-generated content probability estimation using Google Gemini.
+*   **Reporting:**
+    *   Detailed analysis reports including:
+        *   Originality score.
+        *   AI probability score with reasoning.
+        *   Top keywords extracted from the document.
+        *   Search queries generated and used for web search.
+        *   List of detected overlaps with source URLs and similarity scores.
+    *   Downloadable PDF reports of the analysis.
+*   **User Dashboard & History:**
+    *   Dashboard displaying user statistics (e.g., total reports generated, last checked document).
+    *   History page listing all past analysis reports for the logged-in user.
+*   **User Profile:**
+    *   Basic user profile display page.
+*   **User Interface:**
+    *   Responsive UI built with React.
+
+## 3. Tech Stack
+
+**Backend:**
+*   **Language:** Python
+*   **Framework:** Flask
+*   **Database:** MongoDB (using PyMongo)
+*   **Authentication:** Flask-Login, Flask-Bcrypt
+*   **APIs & Services:**
+    *   Google Generative AI (Gemini for embeddings, AI detection, query generation)
+    *   Serper API (for Google search results)
+*   **Core Logic Libraries:**
+    *   NLTK (text processing, keyword extraction)
+    *   pdfminer.six (PDF text extraction)
+    *   python-docx (DOCX text extraction)
+    *   ReportLab (PDF report generation)
+    *   BeautifulSoup4 (web scraping for source content)
+    *   RapidFuzz (fuzzy string matching for plagiarism)
+*   **Other:** python-dotenv (environment variable management)
+
+**Frontend:**
+*   **Language:** JavaScript
+*   **Library/Framework:** React
+*   **Build Tool:** Vite
+*   **Routing:** React Router
+*   **State Management:** React Context (used for `useAuth` and `usePlagiarismCheck` hooks)
+*   **Styling:** CSS (custom styles, no specific framework noted)
+*   **Other:** `js-cookie` (though potentially not strictly needed for auth due to Flask-Login's HTTP-only cookies, it might be used or was planned).
+
+**General:**
+*   **Version Control:** Git
+
+## 4. Prerequisites
+
+*   **Node.js and npm** (or yarn) for the frontend.
+*   **Python 3** (e.g., 3.8+) and pip for the backend.
+*   Access to a **MongoDB** instance (local or cloud-hosted).
+*   **API Keys** for:
+    *   Google Generative AI (from Google AI Studio)
+    *   Serper API (from serper.dev)
+
+## 5. Environment Variables
+
+A `.env` file is required in the `backend` directory to store sensitive credentials and configuration.
+
+Create a file named `.env` in the `backend/` directory with the following content:
+
+```
+FLASK_SECRET_KEY=your_random_flask_secret_key_here
+MONGO_URI=your_mongodb_connection_string_here 
+# e.g., mongodb://localhost:27017/plagiarism_detector
+# or mongodb+srv://<user>:<password>@<cluster-url>/<dbname>?retryWrites=true&w=majority
+GOOGLE_API_KEY=your_google_ai_studio_api_key_here
+SERPER_API_KEY=your_serper_api_key_here
+DEBUG=True 
+# Set to False for production
+```
+
+**Note for Frontend:** The frontend makes API calls to the backend, typically at `http://127.0.0.1:5000`. This is hardcoded in the React hooks (`frontend/src/hooks/`). If your backend runs on a different URL, you'll need to update these hooks.
+
+## 6. Backend Setup
+
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository_url>
+    cd <repository_name>
+    ```
+
+2.  **Navigate to the backend directory:**
+    ```bash
+    cd backend
+    ```
+
+3.  **Create a Python virtual environment:**
+    ```bash
+    python -m venv venv
+    ```
+
+4.  **Activate the virtual environment:**
+    *   Windows:
+        ```bash
+        venv\Scripts\activate
+        ```
+    *   macOS/Linux:
+        ```bash
+        source venv/bin/activate
+        ```
+
+5.  **Install dependencies:**
+    ```bash
+    pip install Flask Flask-CORS Flask-Login Flask-Bcrypt pymongo python-dotenv google-generativeai nltk requests slugify pandas tabulate pdfminer.six python-docx reportlab numpy beautifulsoup4 rapidfuzz
+    ```
+    *(It is good practice to generate a `requirements.txt` file using `pip freeze > requirements.txt` after installing dependencies and commit it to the repository. For now, install using the command above.)*
+
+6.  **NLTK Data Download (if needed):**
+    The application uses NLTK for text processing. The `core_detector.py` script attempts to download the 'stopwords' corpus if not found. You might need to ensure 'punkt' (for tokenization) is also available if not already handled by other dependencies or if explicit sentence tokenization is used elsewhere. If you encounter NLTK-related errors, you can manually download them by running a Python interpreter:
+    ```python
+    import nltk
+    nltk.download('stopwords')
+    nltk.download('punkt')
+    ```
+
+7.  **Create and populate the `.env` file:**
+    As described in the "Environment Variables" section, create a `.env` file in the `backend` directory with your API keys and configurations.
+
+8.  **Run the Flask development server:**
+    ```bash
+    python app.py
+    ```
+
+9.  The backend should now be running on `http://127.0.0.1:5000`.
+
+## 7. Frontend Setup
+
+1.  **Navigate to the frontend directory** (from the project root):
+    ```bash
+    cd frontend
+    ```
+    (If you are in the `backend` directory, use `cd ../frontend`)
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+    (or `yarn install` if you prefer yarn)
+
+3.  **Run the Vite development server:**
+    ```bash
+    npm run dev
+    ```
+    (or `yarn dev`)
+
+4.  The frontend application should now be running, typically on `http://127.0.0.1:5173`, and will attempt to connect to the backend API at `http://127.0.0.1:5000`.
+
+## 8. API Endpoints (Key Examples)
+
+The backend exposes several API endpoints, including:
+
+*   `POST /api/auth/register`: User registration.
+*   `POST /api/auth/login`: User login.
+*   `POST /api/auth/logout`: User logout.
+*   `GET /@me`: Get details of the currently authenticated user.
+*   `POST /analyse`: Submit text or a file for plagiarism and AI content analysis. Requires authentication.
+*   `GET /api/history`: Retrieve the analysis history for the authenticated user. Requires authentication.
+*   `GET /download-report/<filename>`: Download a specific PDF report. Requires authentication.
+*   `GET /api/dashboard_stats`: Get user statistics for the dashboard. Requires authentication.
+
+(Refer to `backend/app.py` for the complete list of routes and their functionalities.)
+
+## 9. Contributing
+
+Contributions are welcome! Please fork the repository, create a new branch for your feature or fix, and submit a pull request with your changes.
+
+## 10. License
+
+This project is currently unlicensed. (Or specify your chosen license, e.g., MIT License).
