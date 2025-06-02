@@ -116,7 +116,7 @@ function ReportHistoryPage() {
                 {report.pdf_file_name && (
                   <button
                     onClick={() => handleDownloadPdf(report.pdf_file_name)}
-                    className="btn btn-secondary"
+                    className="btn btn-primary"
                   >
                     <FiDownload /> Download
                   </button>

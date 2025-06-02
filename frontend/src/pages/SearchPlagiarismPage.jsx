@@ -1,10 +1,10 @@
-// frontend/src/pages/SearchPlagiarismPage.jsx
 import React, { useState, useEffect } from 'react';
 import { usePlagiarismCheck } from '../hooks/usePlagiarismCheck';
+import { useNavigate, Link } from 'react-router-dom';
 import FileUploader from '../components/FileUploader';
 import LoadingOverlay from '../components/LoadingOverlay';
-import { FiSearch, FiXCircle, FiInfo } from 'react-icons/fi';
-import './SearchPlagiarismPage.css'; // Ensure you have a CSS file for styling
+import { FiSearch, FiXCircle, FiCheckCircle } from 'react-icons/fi';
+
 function SearchPlagiarismPage() {
   const {
     loading,
@@ -12,25 +12,31 @@ function SearchPlagiarismPage() {
     error,
     results,
     analyseContent,
-    downloadPdf, // Keep download PDF for the report
+    downloadPdf,
     cancelAnalysis
   } = usePlagiarismCheck();
 
   const [searchText, setSearchText] = useState('');
   const [searchFile, setSearchFile] = useState(null);
   const [highlightedText, setHighlightedText] = useState('');
+  const [reportGenerated, setReportGenerated] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setReportGenerated(false);
+    
     if (!searchText && !searchFile) {
       alert("Please enter text or upload a file for search.");
       return;
     }
 
-    // Call the core analysis function.
-    // The main_text and main_file are the only relevant ones for simple search.
-    await analyseContent(searchText, searchFile);
+    try {
+      await analyseContent(searchText, searchFile);
+      setReportGenerated(true);
+    } catch (err) {
+      console.error("Analysis failed:", err);
+    }
   };
 
   useEffect(() => {
@@ -39,20 +45,10 @@ function SearchPlagiarismPage() {
       let overlapsExist = false;
       const citations = results.citations.filter(c => c !== "No overlaps.");
 
-      // For a simple search, we just highlight any occurrence of terms from overlaps
-      // A more sophisticated approach would involve re-analyzing the main text with regex or NLP for found overlaps.
-      // For this example, we'll do a very basic highlight based on snippets.
       citations.forEach(citation => {
         const match = citation.match(/\[F(\d+)\/C([\d.]+)] (.*)/);
         if (match) {
-          // This is a very simplistic highlighting. In a real scenario, you'd match the 'sn' (source_text) from backend.
-          // Since the backend only sends URL in the current frontend setup, this is illustrative.
-          // For true highlighting, backend needs to return the matched text snippets.
-          // For now, let's just highlight words found in snippets of the results.
-          const snippet = match[3]; // This is the URL
-          // If backend provided "sn" (source_text) in citations:
-          // const overlapSnippet = citation.split('] ')[1].split('<br/>')[0].replace('<i>','').replace('</i>','').replace('…','');
-          // For simplicity, let's just try to highlight a few words from the search query.
+          const snippet = match[3];
           const keywords = searchText.split(/\s+/).filter(word => word.length > 3 && !['the','a','is','in','of'].includes(word.toLowerCase()));
           keywords.forEach(kw => {
             const regex = new RegExp(`(${kw})`, 'gi');
@@ -63,10 +59,6 @@ function SearchPlagiarismPage() {
       });
       
       setHighlightedText(tempText);
-      // You could also iterate over the original `cite_txt` if it contained the `sn` (source text) from backend
-      // and highlight *those specific sentences* within the `searchText`.
-      // For a document reader, you'd load the full text and highlight.
-      // This is a placeholder for highlighting logic.
     } else {
       setHighlightedText(searchText);
     }
@@ -79,25 +71,75 @@ function SearchPlagiarismPage() {
   };
 
   return (
-    <>
+    <div style={{ 
+      maxWidth: '1200px', 
+      margin: '0 auto', 
+      padding: '20px',
+      fontFamily: 'Arial, sans-serif'
+    }}>
       {loading && (
         <LoadingOverlay message={loadingMessage} onCancel={cancelAnalysis} />
       )}
 
-      <header className="app-header">
-        <h1>Search Plagiarism</h1>
-        <p className="subtitle">Quickly check text or a document for potential plagiarism against web sources.</p>
+      <header style={{ 
+        textAlign: 'center', 
+        marginBottom: '30px',
+        padding: '20px 0',
+        borderBottom: '1px solid #eee'
+      }}>
+        <h1 style={{ 
+          fontSize: '2.5rem', 
+          color: '#333',
+          marginBottom: '10px'
+        }}>Search Plagiarism</h1>
+        <p style={{ 
+          fontSize: '1.1rem', 
+          color: '#666',
+          maxWidth: '800px',
+          margin: '0 auto'
+        }}>Quickly check text or a document for potential plagiarism against web sources.</p>
       </header>
 
-      <div className="search-page-layout">
-        <div className="search-input-section card">
-          <h3 className="card-title">Enter Text or Upload File</h3>
+      <div style={{ 
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '30px',
+        marginTop: '20px'
+      }}>
+        <div style={{ 
+          backgroundColor: '#fff',
+          borderRadius: '8px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+          padding: '25px'
+        }}>
+          <h3 style={{ 
+            fontSize: '1.5rem',
+            marginBottom: '20px',
+            color: '#444'
+          }}>Enter Text or Upload File</h3>
           <form onSubmit={handleSubmit}>
-            <div className="input-field-group" style={{ marginBottom: 'var(--spacing-unit)' }}>
-              <FiSearch className="input-icon" />
+            <div style={{ 
+              marginBottom: '20px',
+              position: 'relative'
+            }}>
+              <FiSearch style={{ 
+                position: 'absolute',
+                left: '15px',
+                top: '15px',
+                color: '#999',
+                fontSize: '1.2rem'
+              }} />
               <textarea
                 type="text"
-                className="input-field"
+                style={{ 
+                  width: '100%',
+                  padding: '15px 15px 15px 40px',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  minHeight: '150px',
+                  fontSize: '1rem',
+                  resize: 'vertical'
+                }}
                 placeholder="Enter text or keywords to search for..."
                 rows="6"
                 value={searchText}
@@ -105,7 +147,16 @@ function SearchPlagiarismPage() {
                 disabled={loading}
               ></textarea>
             </div>
-            <div className="or-divider"><span>OR</span></div>
+            <div style={{ 
+              display: 'flex',
+              alignItems: 'center',
+              margin: '20px 0',
+              color: '#999'
+            }}>
+              <div style={{ flex: 1, height: '1px', backgroundColor: '#ddd' }}></div>
+              <span style={{ padding: '0 15px' }}>OR</span>
+              <div style={{ flex: 1, height: '1px', backgroundColor: '#ddd' }}></div>
+            </div>
             <FileUploader
               onFileChange={(file) => {
                 setSearchFile(file);
@@ -116,55 +167,141 @@ function SearchPlagiarismPage() {
             />
             
             {error && (
-              <div className="message-box error" style={{ marginTop: 'var(--spacing-unit)' }}>
+              <div style={{ 
+                marginTop: '20px',
+                padding: '15px',
+                borderRadius: '4px',
+                backgroundColor: '#ffeeee',
+                color: '#d32f2f',
+                border: '1px solid #ffcdd2',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px'
+              }}>
                 <FiXCircle /> {error}
               </div>
             )}
 
-            <div className="form-actions" style={{ justifyContent: 'space-between', marginTop: 'calc(var(--spacing-unit) * 1.5)' }}>
-              <button type="submit" className="btn btn-primary" disabled={loading}>
+            {reportGenerated && (
+              <div style={{ 
+                marginTop: '20px',
+                padding: '15px',
+                borderRadius: '4px',
+                backgroundColor: '#e8f5e9',
+                color: '#2e7d32',
+                border: '1px solid #c8e6c9',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <FiCheckCircle /> Report generated successfully!
+                </div>
+                <div style={{ 
+                  display: 'flex',
+                  gap: '10px',
+                  marginTop: '10px'
+                }}>
+                  <button 
+                    style={{ 
+                      padding: '8px 15px',
+                      backgroundColor: '#f5f5f5',
+                      border: '1px solid #ddd',
+                      borderRadius: '4px',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => window.location.reload()}
+                  >
+                    Perform New Check
+                  </button>
+                  <Link 
+                    to="/history" 
+                    style={{ 
+                      padding: '8px 15px',
+                      backgroundColor: '#4285f4',
+                      color: 'white',
+                      borderRadius: '4px',
+                      textDecoration: 'none',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    View Report History
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            <div style={{ 
+              display: 'flex',
+              justifyContent: 'space-between',
+              marginTop: '30px'
+            }}>
+              <button 
+                type="submit" 
+                style={{ 
+                  padding: '10px 20px',
+                  backgroundColor: '#4285f4',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '1rem'
+                }}
+                disabled={loading}
+              >
                 {loading ? 'Searching...' : 'Search'}
               </button>
-              <button type="button" className="btn btn-secondary" onClick={handleClear} disabled={loading}>
+              <button 
+                type="button" 
+                style={{ 
+                  padding: '10px 20px',
+                  backgroundColor: '#f5f5f5',
+                  border: '1px solid #ddd',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '1rem'
+                }}
+                onClick={handleClear}
+                disabled={loading}
+              >
                 Clear
               </button>
             </div>
           </form>
         </div>
 
-        <div className="search-results-display card">
-          <h3 className="card-title">Search Results</h3>
+        <div style={{ 
+          backgroundColor: '#fff',
+          borderRadius: '8px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+          padding: '25px'
+        }}>
+          <h3 style={{ 
+            fontSize: '1.5rem',
+            marginBottom: '20px',
+            color: '#444'
+          }}>Search Results</h3>
           {results ? (
             <>
-              <ResultsCard
-                originality={results.originality}
-                aiProbability={results.aiProbability}
-                onDownloadPdf={() => downloadPdf(results.pdfReportPath)}
-                pdfReportPath={results.pdfReportPath}
-              />
-              <div className="document-reader-style" style={{ marginTop: 'var(--spacing-unit)' }}>
+              {/* Your existing ResultsCard component would go here */}
+              <div style={{ marginTop: '20px' }}>
                 {highlightedText ? (
                   <div dangerouslySetInnerHTML={{ __html: highlightedText }} />
                 ) : (
-                  <p className="no-results-message">Your text will appear here with highlights from found overlaps.</p>
+                  <p style={{ color: '#999', fontStyle: 'italic' }}>
+                    Your text will appear here with highlights from found overlaps.
+                  </p>
                 )}
               </div>
-              {results.citations && results.citations.length > 0 && results.citations[0] !== "No overlaps." && (
-                <div style={{ marginTop: 'var(--spacing-unit)' }}>
-                  {window.innerWidth <= 768 ? (
-                    <MobileCitationList citations={results.citations} />
-                  ) : (
-                    <CitationTable citations={results.citations} />
-                  )}
-                </div>
-              )}
             </>
           ) : (
-            <p className="no-results-message">Enter text or upload a document to perform a quick plagiarism search.</p>
+            <p style={{ color: '#999', fontStyle: 'italic' }}>
+              Enter text or upload a document to perform a quick plagiarism search.
+            </p>
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
