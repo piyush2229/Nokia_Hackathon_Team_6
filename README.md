@@ -2,7 +2,19 @@
 
 ## 1. Project Overview
 
-This web application is designed to detect plagiarism by comparing input text or documents against web sources. It also estimates the probability of the content being AI-generated. The application features user authentication, allowing users to view their report history and download detailed analysis reports in PDF format.
+This web application detects plagiarism by comparing submitted text against web
+sources and also estimates the probability of the content being AI generated.
+Users can register, sign in and review past reports which are available for
+download as PDFs.
+
+### Directory structure
+
+```
+backend/   # Flask application
+  app.py   # entry point
+  venv/    # contains application modules and requirements.txt
+frontend/  # React/Vite user interface
+```
 
 ## 2. Features
 
@@ -71,20 +83,21 @@ This web application is designed to detect plagiarism by comparing input text or
 
 ## 5. Environment Variables
 
-A `.env` file is required in the `backend` directory to store sensitive credentials and configuration.
-
-Create a file named `.env` in the `backend/` directory with the following content:
+An example environment file is included at `backend/.env.example`.  Copy this
+file to `backend/.env` and replace the placeholder values with your own
+configuration:
 
 ```
-FLASK_SECRET_KEY=your_random_flask_secret_key_here
-MONGO_URI=your_mongodb_connection_string_here 
-# e.g., mongodb://localhost:27017/plagiarism_detector
-# or mongodb+srv://<user>:<password>@<cluster-url>/<dbname>?retryWrites=true&w=majority
-GOOGLE_API_KEY=your_google_ai_studio_api_key_here
-SERPER_API_KEY=your_serper_api_key_here
-DEBUG=True 
-# Set to False for production
+FLASK_SECRET_KEY=your_flask_secret_key
+MONGO_URI=mongodb://localhost:27017/plagiarism_detector
+GOOGLE_API_KEY=your_google_api_key
+SERPER_API_KEY=your_serper_api_key
+DEBUG=True
 ```
+
+`FLASK_SECRET_KEY` should be a random string, `MONGO_URI` points to your MongoDB
+instance and the API keys are obtained from Google AI Studio and serper.dev.
+Set `DEBUG=False` in production.
 
 **Note for Frontend:** The frontend makes API calls to the backend, typically at `http://127.0.0.1:5000`. This is hardcoded in the React hooks (`frontend/src/hooks/`). If your backend runs on a different URL, you'll need to update these hooks.
 
@@ -118,9 +131,9 @@ DEBUG=True
 
 5.  **Install dependencies:**
     ```bash
-    pip install Flask Flask-CORS Flask-Login Flask-Bcrypt pymongo python-dotenv google-generativeai nltk requests slugify pandas tabulate pdfminer.six python-docx reportlab numpy beautifulsoup4 rapidfuzz
+    pip install -r venv/requirements.txt
     ```
-    *(It is good practice to generate a `requirements.txt` file using `pip freeze > requirements.txt` after installing dependencies and commit it to the repository. For now, install using the command above.)*
+    *(The `requirements.txt` file lists all backend dependencies.)*
 
 6.  **NLTK Data Download (if needed):**
     The application uses NLTK for text processing. The `core_detector.py` script attempts to download the 'stopwords' corpus if not found. You might need to ensure 'punkt' (for tokenization) is also available if not already handled by other dependencies or if explicit sentence tokenization is used elsewhere. If you encounter NLTK-related errors, you can manually download them by running a Python interpreter:
