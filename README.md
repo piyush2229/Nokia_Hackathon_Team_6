@@ -45,7 +45,7 @@ frontend/  # React/Vite user interface
 
 The following diagram outlines the core workflow of the system:
 
-![Architecture Diagram](./assets/architecture.png)
+![Architecture Diagram](./architecture.png)
 
 ### 🔄 Workflow Summary:
 
