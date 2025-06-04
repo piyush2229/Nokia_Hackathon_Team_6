@@ -41,7 +41,26 @@ frontend/  # React/Vite user interface
 *   **User Interface:**
     *   Responsive UI built with React.
 
-## 3. Tech Stack
+## 🧩 3. Architecture Diagram
+
+The following diagram outlines the core workflow of the system:
+
+![Architecture Diagram](./assets/architecture.png)
+
+### 🔄 Workflow Summary:
+
+1. **User Input** (text or file) is submitted.
+2. **Text Extraction** parses the input.
+3. **Query Generation** creates search terms.
+4. **Web Search & Scraping** fetches relevant sources.
+5. **Plagiarism Detection** compares scraped data.
+6. **AI Detection** assesses AI generation likelihood.
+7. **PDF Report** is generated with full analysis.
+8. **UI Output** presents the report and metrics to the user.
+
+---
+
+## 4. Tech Stack
 
 **Backend:**
 *   **Language:** Python
@@ -72,7 +91,7 @@ frontend/  # React/Vite user interface
 **General:**
 *   **Version Control:** Git
 
-## 4. Prerequisites
+## 5. Prerequisites
 
 *   **Node.js and npm** (or yarn) for the frontend.
 *   **Python 3** (e.g., 3.8+) and pip for the backend.
@@ -81,7 +100,7 @@ frontend/  # React/Vite user interface
     *   Google Generative AI (from Google AI Studio)
     *   Serper API (from serper.dev)
 
-## 5. Environment Variables
+## 6. Environment Variables
 
 An example environment file is included at `backend/.env.example`.  Copy this
 file to `backend/.env` and replace the placeholder values with your own
@@ -101,7 +120,7 @@ Set `DEBUG=False` in production.
 
 **Note for Frontend:** The frontend makes API calls to the backend, typically at `http://127.0.0.1:5000`. This is hardcoded in the React hooks (`frontend/src/hooks/`). If your backend runs on a different URL, you'll need to update these hooks.
 
-## 6. Backend Setup
+## 7. Backend Setup
 
 1.  **Clone the repository:**
     ```bash
@@ -153,7 +172,7 @@ Set `DEBUG=False` in production.
 
 9.  The backend should now be running on `http://127.0.0.1:5000`.
 
-## 7. Frontend Setup
+## 8. Frontend Setup
 
 1.  **Navigate to the frontend directory** (from the project root):
     ```bash
@@ -175,7 +194,7 @@ Set `DEBUG=False` in production.
 
 4.  The frontend application should now be running, typically on `http://127.0.0.1:5173`, and will attempt to connect to the backend API at `http://127.0.0.1:5000`.
 
-## 8. API Endpoints (Key Examples)
+## 9. API Endpoints (Key Examples)
 
 The backend exposes several API endpoints, including:
 
@@ -190,7 +209,7 @@ The backend exposes several API endpoints, including:
 
 (Refer to `backend/app.py` for the complete list of routes and their functionalities.)
 
-## 9. Contributing
+## 10. Contributing
 
 Contributions are welcome! Please fork the repository, create a new branch for your feature or fix, and submit a pull request with your changes.
 
