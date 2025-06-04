@@ -194,6 +194,3 @@ The backend exposes several API endpoints, including:
 
 Contributions are welcome! Please fork the repository, create a new branch for your feature or fix, and submit a pull request with your changes.
 
-## 10. License
-
-This project is currently unlicensed. (Or specify your chosen license, e.g., MIT License).
