@@ -9,7 +9,6 @@ import LoadingOverlay from './components/LoadingOverlay';
 // Import all pages using correct relative paths
 import AuthPage from './pages/AuthPage'; // Correct relative import for AuthPage
 import DashboardPage from './pages/DashboardPage';
-import PlagiarismCheckerPage from './pages/PlagiarismCheckerPage';
 import ReportHistoryPage from './pages/ReportHistoryPage';
 import SearchPlagiarismPage from './pages/SearchPlagiarismPage';
 import ProfilePage from './pages/ProfilePage';
@@ -50,7 +49,6 @@ function AppContent() {
           {isAuthenticated ? (
             <>
               <Route path="/" element={<DashboardPage />} />
-              <Route path="/check" element={<PlagiarismCheckerPage />} />
               <Route path="/history" element={<ReportHistoryPage />} />
               <Route path="/search" element={<SearchPlagiarismPage />} />
               <Route path="/profile" element={<ProfilePage />} />

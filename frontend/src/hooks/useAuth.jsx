@@ -1,9 +1,8 @@
 // frontend/src/hooks/useAuth.js
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-// import Cookies from 'js-cookie'; // No longer strictly needed for auth status, Flask-Login handles it
 
 const AuthContext = createContext(null);
-const API_BASE_URL = 'http://127.0.0.1:5000';
+export const API_BASE_URL = 'http://127.0.0.1:5000'; // Export for use in other components
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -28,7 +27,6 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(false);
         }
       } else if (response.status === 401) {
-        // Not authenticated, which is expected if no session
         setUser(null);
         setIsAuthenticated(false);
       } else {
@@ -49,7 +47,8 @@ export const AuthProvider = ({ children }) => {
     checkAuthStatus();
   }, [checkAuthStatus]);
 
-  const login = useCallback(async (email, password) => {
+  // MODIFIED: Takes captchaInput (user's text) instead of a token
+  const login = useCallback(async (email, password, captchaInput) => {
     setLoadingAuth(true);
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
@@ -57,15 +56,14 @@ export const AuthProvider = ({ children }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
-        credentials: 'include', // Important for setting session cookie
+        body: JSON.stringify({ email, password, captchaInput }), // Send the user's text
+        credentials: 'include',
       });
 
       const data = await response.json();
       if (response.ok) {
         setUser(data.user);
         setIsAuthenticated(true);
-        // App.jsx useEffect will handle navigation
         return { success: true };
       } else {
         return { success: false, error: data.error || 'Login failed' };
@@ -78,7 +76,8 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const register = useCallback(async (email, password, name) => {
+  // MODIFIED: Takes captchaInput (user's text) instead of a token
+  const register = useCallback(async (email, password, name, captchaInput) => {
     setLoadingAuth(true);
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
@@ -86,8 +85,8 @@ export const AuthProvider = ({ children }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, name }),
-        credentials: 'include', // Important for setting session cookie
+        body: JSON.stringify({ email, password, name, captchaInput }), // Send the user's text
+        credentials: 'include',
       });
 
       const data = await response.json();
@@ -109,20 +108,15 @@ export const AuthProvider = ({ children }) => {
   const logout = useCallback(async () => {
     setLoadingAuth(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/logout`, {
+      await fetch(`${API_BASE_URL}/api/auth/logout`, {
         method: 'GET', // Or POST if your backend expects it
         credentials: 'include',
       });
-
-      if (response.ok) {
-        setUser(null);
-        setIsAuthenticated(false);
-      } else {
-        console.error("Logout failed:", response.statusText);
-      }
     } catch (error) {
       console.error("Error during logout:", error);
     } finally {
+      setUser(null);
+      setIsAuthenticated(false);
       setLoadingAuth(false);
     }
   }, []);

@@ -161,3 +161,40 @@
     padding: 1.5rem 1.2rem;
   }
 }
+/* Add these styles to your existing AuthPage.css */
+
+.captcha-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 1rem 0;
+}
+
+.captcha-image {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  height: 50px; /* Adjust height to match input fields */
+  flex-grow: 1;
+}
+
+.captcha-refresh-btn {
+  background: #f0f2f5;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #555;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.captcha-refresh-btn:hover {
+  background-color: #e0e4e8;
+  color: #000;
+}

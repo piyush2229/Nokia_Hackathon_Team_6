@@ -1,4 +1,3 @@
-// frontend/src/pages/DashboardPage.jsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.jsx';
@@ -46,71 +45,65 @@ function DashboardPage() {
 
   return (
     <>
-      <div className="page-welcome-header">
+      <div className="page-element-header-new">
         <h2>Welcome back, {user?.name || 'User'}!</h2>
         <p>Here's a quick overview of your activity on the Detection Platform.</p>
       </div>
 
       {errorStats && (
-        <div className="message-box error" style={{ marginBottom: 'var(--spacing-unit)' }}>
+        <div className="page-element-error-new">
           <FiAlertCircle /> {errorStats}
         </div>
       )}
 
-      <div className="dashboard-grid">
-        {/* Total Reports Card */}
-        <div className="card dashboard-card">
-          <h3>Total Reports Submitted</h3>
-          <p className="value">{dashboardStats?.total_reports || 0}</p>
-          <p className="sub-value">Analyzed documents</p>
+      <div className="page-element-column-container-new">
+        <div className="page-element-row-new">
+          <div className="page-element-card-new page-element-half-new">
+            <h3>Total Reports Submitted</h3>
+            <p className="page-element-value-new">{dashboardStats?.total_reports || 0}</p>
+            <p className="page-element-subvalue-new">Analyzed documents</p>
+          </div>
+
+          <div className="page-element-card-new page-element-half-new">
+            <h3>Quick Actions</h3>
+            <div className="page-element-links-new">
+              <Link to="/history" className="btn-modern">
+                <FiClock /> View History
+              </Link>
+              <Link to="/search" className="btn-modern">
+                <FiSearch /> Quick Search
+              </Link>
+              <Link to="/profile" className="btn-modern">
+                <FiUser /> Your Profile
+              </Link>
+            </div>
+          </div>
         </div>
 
-        {/* Last Checked Document Card */}
-        <div className="card dashboard-card last-checked-doc-card" style={{ gridColumn: 'span 2' }}>
+        <div className="page-element-card-new page-element-full-new">
           <h3>Last Checked Document</h3>
           {dashboardStats?.last_checked_document ? (
             <>
-              <p className="meta-info">
+              <p className="page-element-meta-new">
                 File: <strong>{dashboardStats.last_checked_document.file_name}</strong>
               </p>
-              <p className="meta-info">
+              <p className="page-element-meta-new">
                 Date: <strong>{new Date(dashboardStats.last_checked_document.submission_date).toLocaleDateString()}</strong>
               </p>
-              <div className="score-display" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                {/* Simplified originality display */}
-                <div style={{ textAlign: 'center' }}>
-                  <p style={{ fontSize: '1rem', fontWeight: 'bold', color: '#1f2937' }}>
-                    {dashboardStats.last_checked_document.originality_score.toFixed(0)}%
-                  </p>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--text-light-color)', marginTop: '0.5rem' }}>
-                    Originality
-                  </p>
+              <div className="page-element-scores-new">
+                <div className="page-element-circle-new">
+                  <span>{dashboardStats.last_checked_document.originality_score.toFixed(0)}%</span>
+                  <p>Originality</p>
                 </div>
-
-                {/* Replace circle with simple linear bar + percentage for AI Probability */}
-                <div style={{ flex: 1 }}>
-                  <label
-                    htmlFor="aiProbability"
-                    style={{ fontSize: '0.8rem', color: 'var(--text-light-color)', marginBottom: '0.3rem', display: 'block' }}
-                  >
-                    AI Probability
-                  </label>
-                  <progress
-                    id="aiProbability"
-                    value={dashboardStats.last_checked_document.ai_probability}
-                    max="100"
-                    style={{ width: '100%', height: '1rem', borderRadius: '0.25rem' }}
-                  />
-                  <p style={{ fontSize: '0.8rem', textAlign: 'right', marginTop: '0.2rem' }}>
-                    {dashboardStats.last_checked_document.ai_probability.toFixed(0)}%
-                  </p>
+                <div className="page-element-circle-new ai">
+                  <span>{dashboardStats.last_checked_document.ai_probability.toFixed(0)}%</span>
+                  <p>AI Probability</p>
                 </div>
               </div>
               {dashboardStats.last_checked_document.pdf_file_name && (
                 <Link
                   to={`/download-report/${dashboardStats.last_checked_document.pdf_file_name}`}
-                  className="btn btn-secondary"
-                  style={{ marginTop: '1rem' }}
+                  className="btn-modern-outline"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -119,24 +112,8 @@ function DashboardPage() {
               )}
             </>
           ) : (
-            <p className="sub-value">No documents checked yet. Start by uploading one!</p>
+            <p className="page-element-subvalue-new">No documents checked yet. Start by uploading one!</p>
           )}
-        </div>
-
-        {/* Quick Links Card */}
-        <div className="card dashboard-card">
-          <h3>Quick Actions</h3>
-          <div className="dashboard-quick-links">
-            <Link to="/history" className="btn btn-primary">
-              <FiClock /> View History
-            </Link>
-            <Link to="/search" className="btn btn-primary">
-              <FiSearch /> Quick Search
-            </Link>
-            <Link to="/profile" className="btn btn-primary">
-              <FiUser /> Your Profile
-            </Link>
-          </div>
         </div>
       </div>
     </>
